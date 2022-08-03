@@ -14,9 +14,10 @@ public class FingerRotation : MonoBehaviour
     [SerializeField] private float rotSpeedConst = 1f;
     [SerializeField] private float rotSpeedMult = 1f;
     [SerializeField] private AnimationCurve cameraSmooth;
-
+    public PointPainter.Coord CurrentCoord;
     private LeanManualRotate _leanManualRotate;
     private Coroutine _rotateCoroutine;
+    public bool freezeRot;
 
     private void Awake()
     {
@@ -36,6 +37,17 @@ public class FingerRotation : MonoBehaviour
             transform.Rotate(Vector3.right * (diffUp - limitDegreeB), Space.World);
         else if (diffUp < -limitDegreeB)
             transform.Rotate(Vector3.right * (diffUp + limitDegreeB), Space.World);
+
+        var forwardXZ = transform.forward;
+        forwardXZ.y = 0; 
+        var forwardYZ = transform.forward;
+        forwardYZ.x = 0;
+        forwardYZ.y = forwardYZ.z < 0 ? -forwardYZ.y : forwardYZ.y;
+        forwardYZ.z = Mathf.Abs(forwardYZ.z);
+        var lat = Vector3.SignedAngle(forwardYZ, Vector3.forward, Vector3.left);
+        var lon = Vector3.SignedAngle(forwardXZ, Vector3.forward, Vector3.down);
+        CurrentCoord = new PointPainter.Coord(lon, lat);
+        Debug.Log(CurrentCoord);
     }
 
     public void OnFingerDelta(Vector2 delta)
@@ -43,11 +55,11 @@ public class FingerRotation : MonoBehaviour
         if (_rotateCoroutine != null)
             StopCoroutine(_rotateCoroutine);
 
-        _leanManualRotate.RotateA(delta.x);
-
-
-
-        _leanManualRotate.RotateB(-delta.y);
+        if (!freezeRot)
+        {
+            _leanManualRotate.RotateA(delta.x);
+            _leanManualRotate.RotateB(-delta.y);
+        }
     }
 
     public void RotatePointToCamera(Vector3 angle)

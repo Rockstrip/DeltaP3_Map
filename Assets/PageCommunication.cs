@@ -18,8 +18,15 @@ public class PageCommunication : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(cityJson))
         {
-            var city = JsonUtility.FromJson<PointPainter.City>(cityJson);
-            _pointPainter.AddPoint(city);
+            try
+            {
+                var city = JsonUtility.FromJson<PointPainter.City>(cityJson);
+                _pointPainter.AddPoint(city);
+            }
+            catch (Exception e)
+            {
+                DebugGUI.Log(e.Message);
+            }
         }
     }
 
@@ -27,8 +34,15 @@ public class PageCommunication : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(cityJson))
         {
-            var city = JsonUtility.FromJson<PointPainter.City>(cityJson);
-            _pointPainter.FocusPoint(city);
+            try
+            {
+                var city = JsonUtility.FromJson<PointPainter.City>(cityJson);
+                _pointPainter.FocusPoint(city);
+            }
+            catch (Exception e)
+            {
+                DebugGUI.Log(e.Message);
+            }
         }
     }
 }

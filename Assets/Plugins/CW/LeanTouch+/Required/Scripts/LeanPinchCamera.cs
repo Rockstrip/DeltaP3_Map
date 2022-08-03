@@ -1,6 +1,9 @@
 using UnityEngine;
 using Lean.Common;
 using CW.Common;
+using UnityEngine;
+using Lean.Common;
+using CW.Common;
 
 namespace Lean.Touch
 {
@@ -193,7 +196,7 @@ namespace Lean.Touch
 			remainingTranslation = newRemainingTranslation;
 		}
 
-		protected void SetZoom(float current)
+		public void SetZoom(float current)
 		{
 			// Make sure the camera exists
 			var camera = CwHelper.GetCamera(_camera, gameObject);

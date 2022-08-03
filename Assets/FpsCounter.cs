@@ -18,7 +18,7 @@ public class FpsCounter : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 0;
         timeleft = updateInterval;
 
         textStyle.fontStyle = FontStyle.Bold;

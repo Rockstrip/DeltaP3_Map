@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,12 +12,30 @@ public class SearchUI : MonoBehaviour
     public void AddPoint()
     {
         if (!string.IsNullOrEmpty(inputField.text))
-            pointPainter.AddPoint(JsonUtility.FromJson<PointPainter.City>(inputField.text));
-    } 
-    
+        {
+            try
+            {
+                pointPainter.AddPoint(JsonUtility.FromJson<PointPainter.City>(inputField.text));
+            }
+            catch (Exception e)
+            {
+                DebugGUI.Log("Wrong City name");
+            }
+        }
+    }
+
     public void FocusPoint()
     {
-        if(!string.IsNullOrEmpty(inputField.text))
-            pointPainter.FocusPoint(JsonUtility.FromJson<PointPainter.City>(inputField.text));
+        if (!string.IsNullOrEmpty(inputField.text))
+        {
+            try
+            {
+                pointPainter.FocusPoint(JsonUtility.FromJson<PointPainter.City>(inputField.text));
+            }
+            catch (Exception e)
+            {
+                DebugGUI.Log("Wrong City name");
+            }
+        }
     }
 }
