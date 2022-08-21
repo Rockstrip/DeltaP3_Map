@@ -24,7 +24,7 @@ public class PointPainter : MonoBehaviour
 
     private void OnEnable()
     {
-        OnlineMapsGUITooltipDrawer.OnMarkerHovered += OnMarkerHovered;
+        // OnlineMapsGUITooltipDrawer.OnMarkerHovered += OnMarkerHovered;
     }
 
     private void OnMarkerHovered(OnlineMapsMarker marker)
