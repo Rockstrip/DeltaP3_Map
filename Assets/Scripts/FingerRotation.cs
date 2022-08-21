@@ -14,7 +14,8 @@ public class FingerRotation : MonoBehaviour
     [SerializeField] private float rotSpeedConst = 1f;
     [SerializeField] private float rotSpeedMult = 1f;
     [SerializeField] private AnimationCurve cameraSmooth;
-    public PointPainter.Coord CurrentCoord;
+    [SerializeField] private float spinSpeed = 0.5f;
+    public Coord CurrentCoord;
     private LeanManualRotate _leanManualRotate;
     private Coroutine _rotateCoroutine;
     public bool freezeRot;
@@ -26,6 +27,8 @@ public class FingerRotation : MonoBehaviour
 
     private void LateUpdate()
     {
+        _leanManualRotate.RotateA(spinSpeed);
+
         var mod = transform.up;
         mod.z = 0;
         var diff = Vector3.SignedAngle(mod.normalized, Vector3.up, Vector3.forward);
@@ -46,7 +49,7 @@ public class FingerRotation : MonoBehaviour
         forwardYZ.z = Mathf.Abs(forwardYZ.z);
         var lat = Vector3.SignedAngle(forwardYZ, Vector3.forward, Vector3.left);
         var lon = Vector3.SignedAngle(forwardXZ, Vector3.forward, Vector3.down);
-        CurrentCoord = new PointPainter.Coord(lon, lat);
+        CurrentCoord = new Coord(lon, lat);
         Debug.Log(CurrentCoord);
     }
 

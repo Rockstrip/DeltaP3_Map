@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using Lean.Touch;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class MapController : MonoBehaviour
 {
     [SerializeField] private LeanPinchCamera leanPinch;
     [SerializeField] private FingerRotation fingerRotation;
-    [SerializeField] private OnlineMapsSpriteRendererControl mapsRenderer;
+    [SerializeField] private OnlineMapsTileSetControl mapsRenderer;
     [SerializeField] private OnlineMaps onlineMaps;
     [SerializeField] private GameObject earth;
     [SerializeField] private Blackout blackout;
-    
+    [SerializeField] private RawImage mapUI;
+    [SerializeField] private OnlineMapsCameraOrbit cameraOrbit;
+    private Resolution oldResolution;
     private enum State { Earth, Map }
 
     private State _state = State.Earth;
@@ -23,7 +26,15 @@ public class MapController : MonoBehaviour
     {
         while (true)
         {
-            
+            mapsRenderer.sizeInScene = new Vector2(Screen.height, Screen.width);
+            cameraOrbit.distance = Screen.height > Screen.width ? Screen.width : Screen.height;
+            var currentResolution = new Resolution {height = Screen.height, width = Screen.width};
+            if (!oldResolution.Equals(currentResolution))
+            {
+                Debug.Log($"Resolution\nX:{Screen.width}\nY:{Screen.height}");
+                onlineMaps.Redraw();
+                oldResolution = currentResolution;
+            }
             var currentCoord = fingerRotation.CurrentCoord.ToVector2();
             if (_state == State.Earth && Math.Abs(leanPinch.Zoom - leanPinch.ClampMin) < 0.1)
             {
@@ -41,7 +52,7 @@ public class MapController : MonoBehaviour
                 Debug.Log("SwitchToMap");
                 Debug.Log(currentCoord);
 
-                onlineMaps.GetComponent<SpriteRenderer>().enabled = true;
+                mapUI.enabled = true;
                 earth.gameObject.SetActive(false);
                 
                 onlineMaps.SetPositionAndZoom(currentCoord.y, currentCoord.x, 4);
@@ -69,7 +80,7 @@ public class MapController : MonoBehaviour
                 fingerRotation.transform.rotation *= Quaternion.Inverse(Quaternion.Euler(angle));
 
                 _state = State.Earth;
-                onlineMaps.GetComponent<SpriteRenderer>().enabled = false;
+                mapUI.enabled = false;
                 earth.gameObject.SetActive(true);
 
                 yield return StartCoroutine(blackout.Hide());

@@ -10,6 +10,7 @@ using UnityEngine;
 public class OnlineMapsGUITooltipDrawer: OnlineMapsTooltipDrawerBase
 {
     public static Action<GUIStyle, string, Vector2> OnDrawTooltip;
+    public static Action<OnlineMapsMarker> OnMarkerHovered;
 
     /// <summary>
     /// Allows you to customize the appearance of the tooltip.
@@ -257,6 +258,8 @@ public class OnlineMapsGUITooltipDrawer: OnlineMapsTooltipDrawerBase
 
         if (tooltipMarker != null)
         {
+            if(tooltipMarker is OnlineMapsMarker)
+                OnMarkerHovered?.Invoke(tooltipMarker as OnlineMapsMarker);
             if (tooltipMarker.OnDrawTooltip != null) tooltipMarker.OnDrawTooltip(tooltipMarker);
             else if (OnlineMapsMarkerBase.OnMarkerDrawTooltip != null) OnlineMapsMarkerBase.OnMarkerDrawTooltip(tooltipMarker);
             else OnGUITooltip(style, tooltip, inputPosition);
