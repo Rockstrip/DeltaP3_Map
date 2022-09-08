@@ -1912,7 +1912,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  spinSpeed: 0.008
+  spinSpeed: 0.004
   CurrentCoord:
     lon: 0
     lat: 0
